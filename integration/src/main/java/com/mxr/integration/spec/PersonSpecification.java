@@ -21,16 +21,16 @@ public class PersonSpecification {
                 : cb.equal(cb.lower(root.get("ageGroup")), ageGroup.toLowerCase());
     }
 
-    public static Specification<Person> hasName(String name) {
-        return (root, query, cb) -> name == null ? null : cb.equal(cb.lower(root.get("name")), name.toLowerCase());
+    // public static Specification<Person> hasName(String name) {
+    //     return (root, query, cb) -> name == null ? null : cb.equal(cb.lower(root.get("name")), name.toLowerCase());
+    // }
+
+    public static Specification<Person> greaterThanAge(Integer minimumAge) {
+        return (root, query, cb) -> minimumAge == null ? cb.conjunction() : cb.greaterThanOrEqualTo(root.get("age"), minimumAge);
     }
 
-    public static Specification<Person> greaterThanAge(Integer age) {
-        return (root, query, cb) -> age == null ? cb.conjunction() : cb.greaterThanOrEqualTo(root.get("age"), age);
-    }
-
-    public static Specification<Person> lessThanAge(Integer age) {
-        return (root, query, cb) -> age == null ? cb.conjunction() : cb.lessThanOrEqualTo(root.get("age"), age);
+    public static Specification<Person> lessThanAge(Integer maximumAge) {
+        return (root, query, cb) -> maximumAge == null ? cb.conjunction() : cb.lessThanOrEqualTo(root.get("age"), maximumAge);
     }
 
     public static Specification<Person> greaterThanGenderProbability(Double genderProbability) {

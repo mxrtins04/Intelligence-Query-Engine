@@ -58,8 +58,12 @@ public class classifyController {
     @GetMapping("/api/profiles")
     public MultipleProcessedResponse getUsersByParams(@RequestParam(required = false) String gender,
             @RequestParam(required = false) 
-            String countryId, @RequestParam(required = false) String ageGroup) {
-        List<PersonSummary> response = integrationService.searchPeople(gender, countryId, ageGroup);
+            String countryId, @RequestParam(required = false) String ageGroup,
+            @RequestParam(required = false) Integer minimumAge,
+            @RequestParam(required = false) Integer maximumAge,
+            @RequestParam(required = false) Double countryProbability,
+            @RequestParam(required = false) Double genderProbability) {
+        List<PersonSummary> response = integrationService.searchPeople(gender, countryId, ageGroup, minimumAge, maximumAge, countryProbability, genderProbability);
         return mapSpecToMultipleProcessedResponse(response);
     }
 

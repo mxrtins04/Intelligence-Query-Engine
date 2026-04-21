@@ -49,11 +49,16 @@ public class IntegrationService {
         return new ProcessedResponse("success", person);
     }
 
-    public List<PersonSummary> searchPeople(String gender, String countryId, String ageGroup) {
+    public List<PersonSummary> searchPeople(String gender, String countryId, String ageGroup, 
+        Integer minimumAge, Integer maximumAge, double countryProbability, double genderProbability) {
         Specification<Person> spec = Specification
                 .where(PersonSpecification.hasGender(gender))
                 .and(PersonSpecification.hasCountryId(countryId))
-                .and(PersonSpecification.hasAgeGroup(ageGroup));
+                .and(PersonSpecification.hasAgeGroup(ageGroup))
+                .and(PersonSpecification.greaterThanAge(minimumAge))
+                .and(PersonSpecification.lessThanAge(maximumAge))
+                .and(PersonSpecification.greaterThanCountryProbability(countryProbability))
+                .and(PersonSpecification.greaterThanGenderProbability(genderProbability));
 
         return mapToPersonSummary(repo.findAll(spec));
     }
