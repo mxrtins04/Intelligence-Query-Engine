@@ -3,6 +3,7 @@ package com.mxr.integration.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -49,18 +50,19 @@ public class IntegrationService {
         return new ProcessedResponse("success", person);
     }
 
-    public List<PersonSummary> searchPeople(String gender, String countryId, String ageGroup, 
-        Integer minimumAge, Integer maximumAge, double countryProbability, double genderProbability) {
+    public Page<Person> searchPeople(String gender, String countryId, String ageGroup, 
+        Integer minimumAge, Integer maximumAge, double minCountryProbability, double minGenderProbability
+        , Pageable pageable) {
         Specification<Person> spec = Specification
                 .where(PersonSpecification.hasGender(gender))
                 .and(PersonSpecification.hasCountryId(countryId))
                 .and(PersonSpecification.hasAgeGroup(ageGroup))
                 .and(PersonSpecification.greaterThanAge(minimumAge))
                 .and(PersonSpecification.lessThanAge(maximumAge))
-                .and(PersonSpecification.greaterThanCountryProbability(countryProbability))
-                .and(PersonSpecification.greaterThanGenderProbability(genderProbability));
+                .and(PersonSpecification.greaterThanCountryProbability(minCountryProbability))
+                .and(PersonSpecification.greaterThanGenderProbability(minGenderProbability));
 
-        return mapToPersonSummary(repo.findAll(spec));
+        return repo.findAll(spec, pageable);
     }
 
     private List<PersonSummary> mapToPersonSummary(List<Person> all) {
