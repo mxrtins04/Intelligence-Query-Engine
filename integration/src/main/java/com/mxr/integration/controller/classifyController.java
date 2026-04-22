@@ -10,6 +10,7 @@ import com.mxr.integration.Response.ProfilePageResponse;
 import com.mxr.integration.model.Person;
 import com.mxr.integration.request.NewEntityRequest;
 import com.mxr.integration.service.IntegrationService;
+import com.mxr.integration.service.DatabaseSeeder;
 import com.mxr.integration.queryparser.NaturalQueryParser;
 import com.mxr.integration.queryparser.ParsedQuery;
 import com.mxr.integration.exceptions.InvalidQueryParametersException;
@@ -36,10 +37,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class classifyController {
     private final IntegrationService integrationService;
     private final NaturalQueryParser nlpParser;
+    private final DatabaseSeeder databaseSeeder;
 
-    public classifyController(IntegrationService integrationService, NaturalQueryParser nlpParser) {
+    public classifyController(IntegrationService integrationService, NaturalQueryParser nlpParser,
+            DatabaseSeeder databaseSeeder) {
         this.integrationService = integrationService;
         this.nlpParser = nlpParser;
+        this.databaseSeeder = databaseSeeder;
     }
 
     @GetMapping("/")
@@ -153,6 +157,17 @@ public class classifyController {
                 .total(page.getTotalElements())
                 .data(page.getContent())
                 .build();
+    }
+
+    @PostMapping("/api/admin/seed")
+    public ResponseEntity<String> seedDatabase() {
+        try {
+            databaseSeeder.seedDatabase();
+            return ResponseEntity.ok("Database seeding completed successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Database seeding failed: " + e.getMessage());
+        }
     }
 
 }
