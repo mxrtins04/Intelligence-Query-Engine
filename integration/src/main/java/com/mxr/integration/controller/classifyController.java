@@ -136,7 +136,7 @@ public class classifyController {
                 parsed.getCountryId(),
                 parsed.getMinAge(),
                 parsed.getMaxAge(),
-                0.0, 0.0,
+                null, null,
                 pageable);
 
         return mapSpecToMultipleProcessedResponse(result, page, limit);

@@ -51,9 +51,9 @@ public class IntegrationService {
         return new ProcessedResponse("success", person);
     }
 
-    public Page<Person> searchPeople(String gender, String countryId, String ageGroup, 
-        Integer minimumAge, Integer maximumAge, double minCountryProbability, double minGenderProbability
-        , Pageable pageable) {
+    public Page<Person> searchPeople(String gender, String countryId, String ageGroup,
+            Integer minimumAge, Integer maximumAge, Double minCountryProbability, Double minGenderProbability,
+            Pageable pageable) {
         Specification<Person> spec = Specification
                 .where(PersonSpecification.hasGender(gender))
                 .and(PersonSpecification.hasCountryId(countryId))
@@ -66,8 +66,9 @@ public class IntegrationService {
         return repo.findAll(spec, pageable);
     }
 
-    public static String mapSortField(String sortBy){
-        if (sortBy == null) return "createdAt";
+    public static String mapSortField(String sortBy) {
+        if (sortBy == null)
+            return "createdAt";
         return switch (sortBy.toLowerCase()) {
             case "age" -> "age";
             case "created_at" -> "createdAt";
@@ -77,7 +78,9 @@ public class IntegrationService {
     }
 
     // private List<PersonSummary> mapToPersonSummary(List<Person> all) {
-    //     return all.stream().map(person -> new PersonSummary(person.getId(), person.getName(), person.getGender(), person.getAge(), calculateAgeGroup(person.getAge()), person.getCountryId())).toList();
+    // return all.stream().map(person -> new PersonSummary(person.getId(),
+    // person.getName(), person.getGender(), person.getAge(),
+    // calculateAgeGroup(person.getAge()), person.getCountryId())).toList();
     // }
 
     public Person getPersonById(UUID id) {
@@ -117,7 +120,7 @@ public class IntegrationService {
 
         if (agifyResponse.getAge() == null)
             throw new NullAgeException("Agify returned an invalid response");
-        
+
         return agifyResponse;
     }
 
@@ -134,7 +137,7 @@ public class IntegrationService {
     public Person mapToPerson(GenderizeResponse genderizeResponse, AgifyResponse agifyResponse,
             NationalizeResponse nationalizeResponse) {
         List<CountryData> countries = nationalizeResponse.getCountries();
-       
+
         return Person.builder()
                 .name(genderizeResponse.getName())
                 .gender(genderizeResponse.getGender())
