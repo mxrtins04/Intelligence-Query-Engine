@@ -3,6 +3,7 @@ package com.mxr.integration.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -65,9 +66,19 @@ public class IntegrationService {
         return repo.findAll(spec, pageable);
     }
 
-    private List<PersonSummary> mapToPersonSummary(List<Person> all) {
-        return all.stream().map(person -> new PersonSummary(person.getId(), person.getName(), person.getGender(), person.getAge(), calculateAgeGroup(person.getAge()), person.getCountryId())).toList();
+    public static String mapSortField(String sortBy){
+        if (sortBy == null) return "createdAt";
+        return switch (sortBy.toLowerCase()) {
+            case "age" -> "age";
+            case "created_at" -> "createdAt";
+            case "gender_probability" -> "genderProbability";
+            default -> "createdAt";
+        };
     }
+
+    // private List<PersonSummary> mapToPersonSummary(List<Person> all) {
+    //     return all.stream().map(person -> new PersonSummary(person.getId(), person.getName(), person.getGender(), person.getAge(), calculateAgeGroup(person.getAge()), person.getCountryId())).toList();
+    // }
 
     public Person getPersonById(UUID id) {
         return repo.findById(id).orElseThrow(() -> new PersonNotFoundException("Person not found"));
