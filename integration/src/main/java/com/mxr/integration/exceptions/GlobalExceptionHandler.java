@@ -14,32 +14,33 @@ import com.mxr.integration.Response.PersonExistsResponse;
 import com.mxr.integration.exceptions.AgifyExceptions.NullAgeException;
 import com.mxr.integration.exceptions.NationalizeExceptions.MissingCountryDataException;
 import com.mxr.integration.repo.PersonRepoImpl;
+import com.mxr.integration.exceptions.InvalidQueryParametersException;
+import com.mxr.integration.exceptions.UninterpretableQueryException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    
+
     private final PersonRepoImpl repo;
-    
+
     public GlobalExceptionHandler(PersonRepoImpl repo) {
         this.repo = repo;
     }
-    
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex){
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            "Required request parameter is missing"
-        );
+                "error",
+                "Required request parameter is missing");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        
+
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            "Invalid request body"
-        );
+                "error",
+                "Invalid request body");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -50,84 +51,93 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePersonNotFoundException(PersonNotFoundException ex){
+    public ResponseEntity<ErrorResponse> handlePersonNotFoundException(PersonNotFoundException ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            ex.getMessage()
-        );
+                "error",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
-    
+
     @ExceptionHandler(InvalidNameException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidNameException(InvalidNameException ex){
+    public ResponseEntity<ErrorResponse> handleInvalidNameException(InvalidNameException ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            ex.getMessage()
-        );
+                "error",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(MissingOrEmptyNameException.class)
-    public ResponseEntity<ErrorResponse> handleMissingOrEmptyNameException(MissingOrEmptyNameException ex){
+    public ResponseEntity<ErrorResponse> handleMissingOrEmptyNameException(MissingOrEmptyNameException ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            ex.getMessage()
-        );
+                "error",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     // @ExceptionHandler(PersonAlreadyExistsException.class)
-    // public ResponseEntity<PersonExistsResponse> handlePersonAlreadyExistsException(PersonAlreadyExistsException ex){
-    //     PersonExistsResponse response = new PersonExistsResponse(
-    //         "error",
-    //         ex.getMessage(),
-    //         repo.findByName(ex.getName())
-    //     );
-    //     return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    // public ResponseEntity<PersonExistsResponse>
+    // handlePersonAlreadyExistsException(PersonAlreadyExistsException ex){
+    // PersonExistsResponse response = new PersonExistsResponse(
+    // "error",
+    // ex.getMessage(),
+    // repo.findByName(ex.getName())
+    // );
+    // return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     // }
 
     @ExceptionHandler(MissingGenderizeDataException.class)
-    public ResponseEntity<ErrorResponse> handleMissingGenderizeDataException(MissingGenderizeDataException ex){
+    public ResponseEntity<ErrorResponse> handleMissingGenderizeDataException(MissingGenderizeDataException ex) {
         ErrorResponse response = new ErrorResponse(
-            "502",
-            ex.getMessage()
-        );
+                "502",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(RestClientException.class)
-    public ResponseEntity<ErrorResponse> handleRestClientException(RestClientException ex){
+    public ResponseEntity<ErrorResponse> handleRestClientException(RestClientException ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            ex.getMessage()
-        );
+                "error",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(NullAgeException.class)
-    public ResponseEntity<ErrorResponse> handleNullAgeException(NullAgeException ex){
+    public ResponseEntity<ErrorResponse> handleNullAgeException(NullAgeException ex) {
         ErrorResponse response = new ErrorResponse(
-            "502",
-            ex.getMessage()
-        );
+                "502",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(MissingCountryDataException.class)
-    public ResponseEntity<ErrorResponse> handleMissingCountryDataException(MissingCountryDataException ex){
+    public ResponseEntity<ErrorResponse> handleMissingCountryDataException(MissingCountryDataException ex) {
         ErrorResponse response = new ErrorResponse(
-            "502",
-            ex.getMessage()
-        );
+                "502",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_GATEWAY);
-    }   
+    }
+
+    @ExceptionHandler(InvalidQueryParametersException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidQueryParametersException(InvalidQueryParametersException ex) {
+        ErrorResponse response = new ErrorResponse(
+                "error",
+                ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UninterpretableQueryException.class)
+    public ResponseEntity<ErrorResponse> handleUninterpretableQueryException(UninterpretableQueryException ex) {
+        ErrorResponse response = new ErrorResponse(
+                "error",
+                ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception ex){
+    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         ErrorResponse response = new ErrorResponse(
-            "error",
-            ex.getMessage()
-        );
+                "error",
+                ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

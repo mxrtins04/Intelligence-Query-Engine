@@ -4099,3 +4099,8 @@ Hibernate: insert into profiles (age,age_group,country_id,country_name,country_p
 2026-04-22T14:21:25.040+01:00  INFO 25637 --- [integration] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2026-04-22T14:21:25.041+01:00  INFO 25637 --- [integration] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2026-04-22T14:21:25.045+01:00  INFO 25637 --- [integration] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-04-22T15:25:46.221+01:00  INFO 25637 --- [integration] [ionShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-22T15:25:46.426+01:00  INFO 25637 --- [integration] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-04-22T15:25:46.568+01:00  INFO 25637 --- [integration] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-22T15:25:46.650+01:00  INFO 25637 --- [integration] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-22T15:25:46.709+01:00  INFO 25637 --- [integration] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

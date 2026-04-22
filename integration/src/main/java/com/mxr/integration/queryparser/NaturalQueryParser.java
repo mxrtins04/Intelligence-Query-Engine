@@ -113,27 +113,6 @@ public class NaturalQueryParser {
             matched = true;
         }
 
-        if (q.contains("child") || q.contains("children") || q.contains("kids") || q.contains("kid")) {
-            result.setAgeGroup("child");
-            matched = true;
-        } else if (q.contains("teenager") || q.contains("teenagers") || q.contains("teen") || q.contains("teens")
-                || q.contains("adolescent")) {
-            result.setAgeGroup("teenager");
-            matched = true;
-        } else if (q.contains("adult") || q.contains("adults")) {
-            result.setAgeGroup("adult");
-            matched = true;
-        } else if (q.contains("senior") || q.contains("seniors") || q.contains("elderly") || q.contains("old people")) {
-            result.setAgeGroup("senior");
-            matched = true;
-        }
-
-        if (q.contains("young") && result.getAgeGroup() == null) {
-            result.setMinAge(16);
-            result.setMaxAge(24);
-            matched = true;
-        }
-
         Matcher aboveMatcher = Pattern
                 .compile("(?:above|over|older than|greater than)\\s+(\\d+)")
                 .matcher(q);
@@ -159,13 +138,46 @@ public class NaturalQueryParser {
             matched = true;
         }
 
+        if (result.getMinAge() == null && result.getMaxAge() == null) {
+            if (q.contains("child") || q.contains("children") || q.contains("kids") || q.contains("kid")) {
+                result.setAgeGroup("child");
+                matched = true;
+            } else if (q.contains("teenager") || q.contains("teenagers") || q.contains("teen") || q.contains("teens")
+                    || q.contains("adolescent")) {
+                result.setAgeGroup("teenager");
+                matched = true;
+            } else if (q.contains("adult") || q.contains("adults")) {
+                result.setAgeGroup("adult");
+                matched = true;
+            } else if (q.contains("senior") || q.contains("seniors") || q.contains("elderly")
+                    || q.contains("old people")) {
+                result.setAgeGroup("senior");
+                matched = true;
+            }
+        }
+
+        if (q.contains("young") && result.getAgeGroup() == null && result.getMinAge() == null) {
+            result.setMinAge(16);
+            result.setMaxAge(24);
+            matched = true;
+        }
+
         Matcher countryMatcher = Pattern
                 .compile(
-                        "(?:from|in)\\s+([a-z][a-z '\\-]+?)(?:\\s+(?:above|below|over|under|between|who|with|and|$)|$)")
+                        "(?:from|in)\\s+([a-z][a-z '\\\\-]+?)(?:\\s+(?:above|below|over|under|between|who|with|and|$)|$)")
                 .matcher(q);
         if (countryMatcher.find()) {
             String countryToken = countryMatcher.group(1).trim();
             String iso = COUNTRY_MAP.get(countryToken);
+            if (iso == null) {
+                String normalizedToken = countryToken.replaceAll("[\\s-]+", "");
+                for (Map.Entry<String, String> entry : COUNTRY_MAP.entrySet()) {
+                    if (entry.getKey().replaceAll("[\\s-]+", "").equals(normalizedToken)) {
+                        iso = entry.getValue();
+                        break;
+                    }
+                }
+            }
             if (iso != null) {
                 result.setCountryId(iso);
                 matched = true;

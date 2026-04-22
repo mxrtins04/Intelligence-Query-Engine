@@ -12,7 +12,6 @@ import com.mxr.integration.Response.AgifyResponse;
 import com.mxr.integration.Response.GenderizeResponse;
 import com.mxr.integration.Response.NationalizeResponse;
 import com.mxr.integration.Response.PersonExistsResponse;
-import com.mxr.integration.Response.PersonSummary;
 import com.mxr.integration.Response.ProcessedResponse;
 import com.mxr.integration.exceptions.MissingGenderizeDataException;
 import com.mxr.integration.exceptions.MissingOrEmptyNameException;
@@ -20,6 +19,7 @@ import com.mxr.integration.exceptions.PersonNotFoundException;
 import com.mxr.integration.exceptions.AgifyExceptions.NullAgeException;
 import com.mxr.integration.exceptions.NationalizeExceptions.MissingCountryDataException;
 import com.mxr.integration.exceptions.InvalidNameException;
+import com.mxr.integration.exceptions.InvalidQueryParametersException;
 import com.mxr.integration.model.CountryData;
 import com.mxr.integration.model.Person;
 import com.mxr.integration.repo.PersonRepoImpl;
@@ -73,15 +73,9 @@ public class IntegrationService {
             case "age" -> "age";
             case "created_at" -> "createdAt";
             case "gender_probability" -> "genderProbability";
-            default -> "createdAt";
+            default -> throw new InvalidQueryParametersException("Invalid sort field: " + sortBy);
         };
     }
-
-    // private List<PersonSummary> mapToPersonSummary(List<Person> all) {
-    // return all.stream().map(person -> new PersonSummary(person.getId(),
-    // person.getName(), person.getGender(), person.getAge(),
-    // calculateAgeGroup(person.getAge()), person.getCountryId())).toList();
-    // }
 
     public Person getPersonById(UUID id) {
         return repo.findById(id).orElseThrow(() -> new PersonNotFoundException("Person not found"));
