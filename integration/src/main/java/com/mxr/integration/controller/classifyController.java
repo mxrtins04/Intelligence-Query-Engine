@@ -71,11 +71,11 @@ public class classifyController {
 
     @GetMapping("/api/profiles")
     public ProfilePageResponse getProfiles(@RequestParam(required = false) String gender,
-            @RequestParam(required = false) String countryId, @RequestParam(required = false) String ageGroup,
-            @RequestParam(required = false) Integer minimumAge,
-            @RequestParam(required = false) Integer maximumAge,
-            @RequestParam(required = false) Double minCountryProbability,
-            @RequestParam(required = false) Double minGenderProbability,
+            @RequestParam(name = "country_id", required = false) String countryId, @RequestParam(name = "age_group", required = false) String ageGroup,
+            @RequestParam(name = "min_age", required = false) Integer minimumAge,
+            @RequestParam(name = "max_age", required = false) Integer maximumAge,
+            @RequestParam(name = "min_country_probability", required = false) Double minCountryProbability,
+            @RequestParam(name = "min_gender_probability", required = false) Double minGenderProbability,
             @RequestParam(defaultValue = "created_at") String sort_by,
             @RequestParam(defaultValue = "asc") String order,
             @RequestParam(defaultValue = "1") int page,
