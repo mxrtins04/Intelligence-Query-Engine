@@ -93,7 +93,7 @@ public class classifyController {
         PageRequest pageable = PageRequest.of(page - 1, limit, Sort.by(direction, javaField));
 
         Page<Person> result = integrationService.searchPeople(
-                gender, ageGroup, countryId,
+                gender, countryId, ageGroup,
                 minimumAge, maximumAge,
                 minCountryProbability, minGenderProbability,
                 pageable);
@@ -132,8 +132,8 @@ public class classifyController {
 
         Page<Person> result = integrationService.searchPeople(
                 parsed.getGender(),
-                parsed.getAgeGroup(),
                 parsed.getCountryId(),
+                parsed.getAgeGroup(),
                 parsed.getMinAge(),
                 parsed.getMaxAge(),
                 null, null,
