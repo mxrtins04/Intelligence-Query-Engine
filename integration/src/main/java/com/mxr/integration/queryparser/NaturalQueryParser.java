@@ -163,8 +163,7 @@ public class NaturalQueryParser {
         }
 
         Matcher countryMatcher = Pattern
-                .compile(
-                        "(?:from|in)\\s+([a-z][a-z '\\\\-]+?)(?:\\s+(?:above|below|over|under|between|who|with|and|$)|$)")
+                .compile("(?:from|in)\\s+([a-z][a-z'\\-]+)(?:\\s+(?:above|below|over|under|between|who|with|and|$)|$)")
                 .matcher(q);
         if (countryMatcher.find()) {
             String countryToken = countryMatcher.group(1).trim();

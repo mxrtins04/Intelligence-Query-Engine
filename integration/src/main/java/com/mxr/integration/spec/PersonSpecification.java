@@ -7,15 +7,18 @@ import com.mxr.integration.model.Person;
 public class PersonSpecification {
 
     public static Specification<Person> hasGender(String gender) {
-        return (root, query, cb) -> gender == null ? null : cb.equal(root.get("gender"), gender);
+        return (root, query, cb) -> gender == null ? null
+                : cb.equal(cb.lower(root.get("gender")), gender.toLowerCase());
     }
 
     public static Specification<Person> hasCountryId(String countryId) {
-        return (root, query, cb) -> countryId == null ? null : cb.equal(root.get("countryId"), countryId);
+        return (root, query, cb) -> countryId == null ? null
+                : cb.equal(cb.lower(root.get("countryId")), countryId.toLowerCase());
     }
 
     public static Specification<Person> hasAgeGroup(String ageGroup) {
-        return (root, query, cb) -> ageGroup == null ? null : cb.equal(root.get("ageGroup"), ageGroup);
+        return (root, query, cb) -> ageGroup == null ? null
+                : cb.equal(cb.lower(root.get("ageGroup")), ageGroup.toLowerCase());
     }
 
     // public static Specification<Person> hasName(String name) {
@@ -34,12 +37,12 @@ public class PersonSpecification {
     }
 
     public static Specification<Person> greaterThanGenderProbability(Double genderProbability) {
-        return (root, query, cb) -> genderProbability == null ? null
+        return (root, query, cb) -> genderProbability == null ? cb.conjunction()
                 : cb.greaterThanOrEqualTo(root.get("genderProbability"), genderProbability);
     }
 
     public static Specification<Person> greaterThanCountryProbability(Double countryProbability) {
-        return (root, query, cb) -> countryProbability == null ? null
+        return (root, query, cb) -> countryProbability == null ? cb.conjunction()
                 : cb.greaterThanOrEqualTo(root.get("countryProbability"), countryProbability);
     }
 }
